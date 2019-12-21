@@ -1,0 +1,39 @@
+{
+  "name": "cashback-ext",
+  "description": "Best Cashback App",
+  "version": null,
+  "manifest_version": 2,
+  "author": "vivat.rafael@gmail.com",
+  "minimum_chrome_version": "70",
+  "icons": {
+    "48": "icons/icon_48.png",
+    "128": "icons/icon_128.png"
+  },
+  "permissions": [
+    "proxy",
+    "management",
+    "notifications",
+    "cookies",
+    "activeTab",
+    "tabs",
+    "storage",
+    "webNavigation",
+    "webRequest",
+    "webRequestBlocking",
+    "http://*/*",
+    "https://*/*"
+  ],
+  "browser_action": {
+    "default_title": "cashback-ext",
+    "default_popup": "popup/popup.html"
+  },
+  "background": {
+    "scripts": [
+      "background.js"
+    ]
+  },
+  "options_ui": {
+    "page": "options/options.html",
+    "chrome_style": true
+  }
+}
