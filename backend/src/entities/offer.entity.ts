@@ -1,5 +1,6 @@
+import { ServiceOffer } from './serviceOffer.entity';
 import { RegExpColumn } from '../columns/regexp';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
 export class Offer {
@@ -12,15 +13,18 @@ export class Offer {
   @Column({ length: 500 })
   url: string;
 
-  // @Column({ length: 500 })
-  // affiliateLink: string;
+  @Column({ length: 500, default: '' })
+  affiliateLink: string;
 
   @Column({ length: 500 })
   logo: string;
 
+  @Column({ length: 500, default: '' })
+  rateSymbol: string;
+
   @RegExpColumn()
   linkMatch: RegExp;
 
-  // @Column({ length: 500 })
-  // conditions: string;
+  @OneToMany(type => ServiceOffer, serviceOffer => serviceOffer.offer)
+  serviceOffers: number[];
 }

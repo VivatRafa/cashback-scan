@@ -1,5 +1,3 @@
-import { ServiceOfferCategory } from './../entities/serviceOfferCategory.entity';
-import { Category } from './../entities/category.entity';
 import { ServiceOffer } from './../entities/serviceOffer.entity';
 import { Offer } from './../entities/offer.entity';
 import { Service } from './../entities/service.entity';
@@ -9,7 +7,7 @@ import { MainService } from './main.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Offer,Service,ServiceOffer,Category,ServiceOfferCategory]),
+    TypeOrmModule.forFeature([Offer,Service,ServiceOffer]),
     HttpModule,
   ],
   controllers: [],

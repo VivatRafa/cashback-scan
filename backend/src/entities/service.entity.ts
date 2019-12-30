@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { ServiceOffer } from './serviceOffer.entity';
+import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
 export class Service {
@@ -13,4 +14,7 @@ export class Service {
 
   @Column({ length: 500 })
   apiUrl: string;
+  
+  @OneToMany(type => ServiceOffer, serviceOffer => serviceOffer.service)
+  serviceOffers: number[]
 }
