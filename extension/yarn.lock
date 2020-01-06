@@ -1184,14 +1184,6 @@ aws4@^1.8.0:
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.8.0.tgz#f0e003d9ca9e7f59c7a508945d7b2ef9a04a542f"
   integrity sha512-ReZxvNHIOv88FlT7rxcXIIC0fPt4KZqZbOlivyWtXLt8ESx84zd3kMC6iK5jVeS2qt+g7ftS7ye4fi06X5rtRQ==
 
-axios@^0.18.0:
-  version "0.18.1"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-0.18.1.tgz#ff3f0de2e7b5d180e757ad98000f1081b87bcea3"
-  integrity sha512-0BfJq4NSfQXd+SkFdrvFbG7addhYSBA2mQwISr46pD6E5iqkWg02RAs8vyTT/j0RTnoYmeXauBuSv1qKwR179g==
-  dependencies:
-    follow-redirects "1.5.10"
-    is-buffer "^2.0.2"
-
 axios@^0.19.0:
   version "0.19.0"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.19.0.tgz#8e09bff3d9122e133f7b8101c8fbdd00ed3d2ab8"
@@ -1584,16 +1576,6 @@ chardet@^0.7.0:
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/chardet/-/chardet-0.7.0.tgz#90094849f0937f2eedc2425d0d28a9e5f0cbad9e"
   integrity sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==
-
-chimu-api@^1.2.4:
-  version "1.2.4"
-  resolved "https://registry.yarnpkg.com/chimu-api/-/chimu-api-1.2.4.tgz#f938ee7f676e33924ffa7ed62a3256a5bde84b0e"
-  integrity sha512-nfYrod9XRUUV5llLlIfcmyBaGih9EpxfFqc0146IzG4pWETtQIu+X3q0OC5Q5PGuGYx/9xnaEW1VFQUWQ+Xbxw==
-  dependencies:
-    axios "^0.18.0"
-    cross-env "^5.2.0"
-    livr "^2.2.4"
-    lodash "^4.17.11"
 
 chokidar@^2.0.2:
   version "2.1.8"
@@ -3782,11 +3764,6 @@ lines-and-columns@^1.1.6:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.1.6.tgz#1c00c743b433cd0a4e80758f7b64a57440d9ff00"
   integrity sha1-HADHQ7QzzQpOgHWPe2SldEDZ/wA=
-
-livr@^2.2.4:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/livr/-/livr-2.3.0.tgz#02bdef268eddbc32db7367df7eccb1e2ec587d50"
-  integrity sha512-napJP1sTlLwzqrQEeyj/trf//MGa6H/i3fqiWdM6eUjHhSA+no+xfEeKV5Kz7JyDbmUEPmq6L6jQwsCRwH9ndQ==
 
 load-json-file@^1.0.0:
   version "1.1.0"

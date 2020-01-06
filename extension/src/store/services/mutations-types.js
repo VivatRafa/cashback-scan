@@ -1,0 +1,1 @@
+export const SET_SERVICES_DATA = 'SET_SERVICES_DATA';

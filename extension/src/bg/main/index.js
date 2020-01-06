@@ -1,25 +1,23 @@
 import Offers from '~/bg/offers';
-import ServiceData from '~/bg/serviceData';
-import { common } from '~/config';
-
-const { services } = common;
+import Services from '~/bg/services';
 
 class Main {
     constructor(store) {
         this.store = store;
         this.offers = new Offers(store);
-        this.serviceData = new ServiceData(this.offers);
+        this.services = new Services(store);
         this.init();
     }
 
-    init() {
+    async init() {
+        this.services.getServices();
         this.offers.getOffers();
         // this.updateAllTabs();
         browser.webNavigation.onBeforeNavigate.addListener(this.beforeNavigateHandler.bind(this));
     }
 
     beforeNavigateHandler({ url }) {
-        this.offers.getOfferByService(services.letyshops, url);
+        // Летишопс тянет кэшбэк отдельно для каждого оффера
     }
 
     /**

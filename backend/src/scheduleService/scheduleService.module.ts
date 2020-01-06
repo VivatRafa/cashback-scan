@@ -5,10 +5,7 @@ import { ScheduleService } from './scheduleService.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Service]),
-    ServicesModule,
-  ],
-  providers: [ScheduleService],
+    imports: [TypeOrmModule.forFeature([Service]), ServicesModule],
+    providers: [ScheduleService],
 })
 export class ScheduleServiceModule {}

@@ -6,12 +6,12 @@ import { Module, HttpModule } from '@nestjs/common';
 import { MainService } from './main.service';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Offer,Service,ServiceOffer]),
-    HttpModule,
-  ],
-  controllers: [],
-  providers: [MainService],
-  exports: [MainService],
+    imports: [
+        TypeOrmModule.forFeature([Offer, Service, ServiceOffer]),
+        HttpModule,
+    ],
+    controllers: [],
+    providers: [MainService],
+    exports: [MainService],
 })
 export class ServicesModule {}

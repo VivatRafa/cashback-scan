@@ -6,14 +6,13 @@ import { MainService } from '../services/main.service';
 import { Repository } from 'typeorm';
 
 @Injectable()
-export class ScheduleService extends NestSchedule{
-  constructor(private readonly mainService: MainService) {
-    super();
-  }
+export class ScheduleService extends NestSchedule {
+    constructor(private readonly mainService: MainService) {
+        super();
+    }
 
     @Cron('*/2 * * * * *', { startTime: new Date(), key: 'schedule-cron' })
     async cronJob() {
-      // this.mainService.getAllOffers();
-      
+        // this.mainService.getAllOffers();
     }
 }

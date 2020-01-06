@@ -1,10 +1,10 @@
-import { Column, ColumnOptions } from "typeorm";
-import { RegExpStringTransformer } from "./regexp";
+import { Column, ColumnOptions } from 'typeorm';
+import { RegExpStringTransformer } from './regexp';
 
 export function RegExpColumn(opts: ColumnOptions = {}) {
-  opts.type = String;
-  opts.transformer = RegExpStringTransformer;
-  return Column(opts)
+    opts.type = String;
+    opts.transformer = RegExpStringTransformer;
+    return Column(opts);
 }
 
 /**

@@ -1,17 +1,20 @@
 <template>
     <div class="plugin-content">
         <offer-name />
-        <service-list :services="services" />
+        <div>
+            <service v-for="service of services"   :service="service" :key="service.id" />
+        </div>
     </div>
 </template>
 
 <script>
 import { openWebVersion, getTabInfo, bgPage } from '~/helpers';
-import serviceList from './service-list';
+import { mapGetters } from 'vuex';
+import service from './service';
 import offerName from '~/components/offer-name';
 
 export default {
-    components: { serviceList, offerName },
+    components: { service, offerName },
 
     data() {
         return {
@@ -20,32 +23,43 @@ export default {
         }
     },
 
-    // Почему то работает
     asyncComputed: {
         url() {
             return getTabInfo('url').then(url => url);
         },
     },
+
+    computed: {
+        ...mapGetters('services', ['getServicesByIds']),
+    },
     
     watch: {
         url(newValue) {
-            if (newValue) {
-                this.getOfferName(newValue);
-                this.getServiceData(newValue);
-            };
+            if (newValue) this.getServiceData(newValue);
         },
     },
 
     methods: {
-        getOfferName(link) {
-            const offer = bgPage.offers.getOfferByService('backit', link);
-            this.offerName = offer?.attributes?.name;
-        },
-
         async getServiceData(url) {
-            this.services = await bgPage.serviceData.getData(url);
-            
+            const { offer, serviceOffers } = await bgPage.offers.getServiceOffer(url) || {};
+            const serviceIds = serviceOffers.map(({ serviceId }) => serviceId);
+            const services = this.getServicesByIds([serviceIds]);
+            this.services = services.map(service => {
+                let tempService = { ...service };
+                serviceOffers.forEach(serviceOffer => {
+                    if (service.id === serviceOffer.serviceId) {
+                        const { cashback, confirmTime } = serviceOffer;
+                        tempService = {
+                            ...tempService,
+                            cashback,
+                            confirmTime,
+                        }
+                    }
+                });
+            })
         }
+
+
     },
 };
 </script>

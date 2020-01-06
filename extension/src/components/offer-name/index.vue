@@ -15,9 +15,7 @@ export default {
     asyncComputed: {
         async offerName() {
             const url = await getTabInfo('url');
-            const offer = bgPage.offers.getOfferByService('backit', url);
-            
-            return offer?.attributes?.name;
+            return bgPage.offers.getOffer(url, 'name');
         },
     },
 

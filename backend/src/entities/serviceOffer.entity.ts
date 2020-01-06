@@ -1,33 +1,47 @@
 import { Service } from './service.entity';
 import { Offer } from './offer.entity';
-import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn, Column, ManyToOne, OneToMany } from 'typeorm';
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    OneToOne,
+    JoinColumn,
+    Column,
+    ManyToOne,
+    OneToMany,
+} from 'typeorm';
 
 @Entity()
 export class ServiceOffer {
-  @PrimaryGeneratedColumn()
-  id: number;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @ManyToOne(type => Offer, offer => offer.serviceOffers)
-  offer: Offer;
-  
-  @ManyToOne(type => Service, service => service.serviceOffers)
-  service: Service;
+    @ManyToOne(type => Offer, offer => offer.serviceOffers)
+    offer: Offer;
 
-  @Column({ 
-    length: 500,
-    default: null
-  })
-  confirmTime: string;
+    @Column({ nullable: true })
+    offerId: number;
 
-  @Column({ length: 1000 })
-  rates: string;
+    @ManyToOne(type => Service, service => service.serviceOffers)
+    service: Service;
 
-  @Column({
-    length: 500,
-    default: null,
-  })
-  conditions: string;
+    @Column({ nullable: true })
+    serviceId: number;
 
-  @Column({ length: 150 })
-  cashback: string;
+    @Column({
+        length: 500,
+        default: null,
+    })
+    confirmTime: string;
+
+    @Column('text')
+    rates: string;
+
+    @Column({
+        length: 500,
+        default: null,
+    })
+    conditions: string;
+
+    @Column({ length: 150 })
+    cashback: string;
 }

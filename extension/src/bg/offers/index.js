@@ -1,55 +1,100 @@
-import BackitOffers from '../cashbackSerivces/backit/offers';
-import LetyshopsOffers from '../cashbackSerivces/letyshops/offers';
-import KopikotOffers from '../cashbackSerivces/kopikot/offers';
-import Cash4brandsOffers from '../cashbackSerivces/cash4brands/offers';
+import { GET_OFFER, GET_OFFERS } from '~/store/offers/events';
+import cloneDeep from 'lodash/cloneDeep';
 
-import { common } from '~/config';
-
-const { servicesList } = common;
-
+/**
+ * @class Offers
+ * Полезная информация
+ * Сущность offer - инфа о самом оффере
+ */
 class Offers {
     constructor(store) {
         this.store = store;
-        this.offers = {
-            backit: new BackitOffers(this.store),
-            letyshops: new LetyshopsOffers(this.store),
-            kopikot: new KopikotOffers(this.store),
-            cash4brands: new Cash4brandsOffers(this.store),
+        this.cache = {
+            offers: [],
+            expire: 0,
+            serviceOffers: {},
         };
     }
 
-    /**
-     * Вызовет методы получения офферов всех
-     * сервисов
-     */
-    getOffers() {
-        servicesList.forEach(service => {
-            this.offers[service].getOffers();
-        });
+    async getOffers() {
+        const result = await this.store.dispatch(`offers/${GET_OFFERS}`);
+        if (result) {
+            this.cache.offers = this.convertRegexpsInOffers(this.store?.state?.offers?.offers);            
+        }
+        return result;
     }
 
     /**
-     * Достает инфу об оффере из каждого сервиса
-     * вернет объект с ключами названия сервисов
-     * @param {String} url
+     * 
+     * @param {Array} offers 
      */
-    async getOfferByAllService(url) {
-        const offer = {};
-        servicesList.forEach(async service => {
-            offer[service] = await this.offers[service].getOffer(url);
+    convertRegexpsInOffers(offers) {
+        return offers.map(offer => {
+            let linkMatch = '';
+            try {
+                const match = offer.linkMatch.match(/^\/(.*)\/(.*)$/);
+                if (match) {
+                  const [, pattern, flags] = match;
+                  linkMatch = new RegExp(pattern, flags);
+                } else {
+                  throw new Error(`"${offer.linkMatch}" is not a regular expression`);
+                }
+            } catch (e) {
+                linkMatch = new RegExp(offer.linkMatch.slice(1, -3).replace(/\\-/g, '-'), 'iu');
+            }
+            return {
+                ...offer,
+                linkMatch,
+            }
         });
-
-        return offer;
     }
 
-    /**
-     * Достанет оффера из конкретного сервиса
-     * @param {String} service
-     * @param {String} url
-     */
-    getOfferByService(service, url) {
-        if (!url || !servicesList.includes(service)) return null;
-        return this.offers[service].getOffer(url);
+    getOffer(link, property = null) {
+        if (!link) return null;
+        const offer = this.cache.offers.find(({ linkMatch }) => linkMatch.test(link));
+        if (!offer) return null;
+        return property ? offer[property] : cloneDeep(offer)
+    }
+
+    checkUrlForOffer() {
+        return !!this.getOffer(link);
+    }
+
+    async getServiceOffer(link) {
+        const id = this.getOffer(link, 'id');
+        if (!id) return null;
+
+        const params = {
+            data: { id }
+        };
+
+        if (this.cache.serviceOffers[id]) return this.cache.serviceOffers[id];
+
+        const result = await this.store.dispatch(`offers/${GET_OFFER}`, params);
+        if (result) {
+            const { offer, serviceOffers } = this.store?.state?.offers?.serviceOffer;
+            
+            if (!offer || !serviceOffers) return null;
+
+            const serviceOffersWithParsedRates = serviceOffers.map(serviceOffer => {
+                try {
+                    const rates = JSON.parse(serviceOffer.rates);
+                    return {
+                        ...serviceOffer,
+                        rates,
+                    }
+                } catch (e) {
+                    throw new Error(e);
+                }
+            });
+            
+            this.cache.serviceOffers[id] = {
+                offer,
+                serviceOffers: serviceOffersWithParsedRates,
+            }
+            return cloneDeep(this.cache.serviceOffers[id]);
+        }
+        return null;
     }
 }
 
