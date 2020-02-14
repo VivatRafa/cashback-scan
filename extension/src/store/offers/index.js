@@ -4,16 +4,16 @@ import * as types from './mutations-types';
 
 const state = {
     offers: [],
-    serviceOffer: null,
+    serviceOfferAndOffer: null,
     offersIsLoaded: true,
 };
 
 const actions = {
     [GET_OFFERS]: async ({ commit }) => {
         const resp = await browser.api.get('/offers');
-        
+
         if (resp.ok) {
-            const data = await resp.json();            
+            const data = await resp.json();
             commit(types.SET_OFFERS_DATA, data);
         }
 
@@ -24,7 +24,7 @@ const actions = {
         const params = actionData.data;
 
         const resp = await browser.api.get('/offer', params);
-        
+
         if (resp.ok) {
             const data = await resp.json();
             commit(types.SET_SERVICE_OFFER_DATA, data);
@@ -45,8 +45,23 @@ const mutations = {
         state.offersIsLoading = value;
     },
     [types.SET_SERVICE_OFFER_DATA](state, value) {
-        state.serviceOffer = value;
-    }
+        const { offer, serviceOffers } = value;
+        const serviceOffersWithParsedRates = serviceOffers.map(serviceOffer => {
+            try {
+                const rates = JSON.parse(serviceOffer.rates);
+                return {
+                    ...serviceOffer,
+                    rates,
+                };
+            } catch (e) {
+                throw new Error(e);
+            }
+        });
+        state.serviceOfferAndOffer = {
+            offer,
+            serviceOffers: serviceOffersWithParsedRates,
+        };
+    },
 };
 
 export default {

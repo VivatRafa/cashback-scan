@@ -2,13 +2,16 @@
     <a-card hoverable>
         <div class="wrap">
             <div class="logo">
-                <img :src="service.logo">
+                <img :src="service.logo" />
             </div>
             <div class="info">
                 <div class="name">{{ service.name }}</div>
-                <div class="confirm">Период подтвреждения {{ service.confirmTime }}</div>
-                <div class="cashback">Кэшбэк (до) {{ addSignToString(service.offer.cashback, '%') }}</div>
-                <a-button @click="toService(service.id, service.title)" type="link">Подробнее</a-button>
+                <div class="confirm">Период подтвреждения: {{ service.offer.confirmTime || 'уточняем' }}</div>
+                <div class="cashback">
+                    Кэшбэк (до)
+                    {{ addSignToString(service.offer.cashback, service.offer.rateSymbol) }}
+                </div>
+                <a-button @click="toService(service.serviceOfferId)" type="link">Подробнее</a-button>
             </div>
         </div>
     </a-card>
@@ -22,23 +25,21 @@ export default {
         service: {
             required: true,
             validator: value => typeof value === 'object' || null,
-        }
+        },
     },
     data() {
-        return {
-
-        }
+        return {};
     },
     computed: {
         bgColor() {
             return this.service?.logo?.bgColor || 'none';
-        }
+        },
     },
     methods: {
         addSignToString,
-        toService(id, service) {
-            this.$router.push({ path: `service/${id}`, params: { service }});
-        }
+        toService(serviceOfferId) {
+            this.$router.push({ path: `service/${serviceOfferId}` });
+        },
     },
 };
 </script>
@@ -70,6 +71,7 @@ export default {
     }
     .confirm {
         font-size: 11px;
+        min-height: 16px;
         margin: 5px 0;
     }
     .cashback {

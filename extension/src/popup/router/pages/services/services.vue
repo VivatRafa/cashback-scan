@@ -2,15 +2,14 @@
     <div class="plugin-content">
         <offer-name />
         <div>
-            <service v-for="service of services"   :service="service" :key="service.id" />
+            <service v-for="service in services" :service="service" :key="service.id" />
         </div>
     </div>
 </template>
 
 <script>
 import { openWebVersion, getTabInfo, bgPage } from '~/helpers';
-import { mapGetters } from 'vuex';
-import service from './service';
+import service from './service/service';
 import offerName from '~/components/offer-name';
 
 export default {
@@ -20,7 +19,7 @@ export default {
         return {
             services: [],
             offerName: null,
-        }
+        };
     },
 
     asyncComputed: {
@@ -29,40 +28,39 @@ export default {
         },
     },
 
-    computed: {
-        ...mapGetters('services', ['getServicesByIds']),
-    },
-    
     watch: {
         url(newValue) {
-            if (newValue) this.getServiceData(newValue);
+            if (newValue) this.getServiceOfferData(newValue);
         },
     },
 
     methods: {
-        async getServiceData(url) {
-            const { offer, serviceOffers } = await bgPage.offers.getServiceOffer(url) || {};
+        async getServiceOfferData(url) {
+            const { offer, serviceOffers } = (await bgPage.offers.getServiceOffersAndOfferBy({ url })) || {};
+
+            if (!offer || !serviceOffers) return null;
+
             const serviceIds = serviceOffers.map(({ serviceId }) => serviceId);
-            const services = this.getServicesByIds([serviceIds]);
+            const services = bgPage.services.getServicesByIds(serviceIds);
+
             this.services = services.map(service => {
                 let tempService = { ...service };
                 serviceOffers.forEach(serviceOffer => {
                     if (service.id === serviceOffer.serviceId) {
-                        const { cashback, confirmTime } = serviceOffer;
+                        const { id: serviceOfferId, cashback, confirmTime } = serviceOffer;
+                        const { id: offerId, rateSymbol } = offer;
                         tempService = {
                             ...tempService,
-                            cashback,
-                            confirmTime,
-                        }
+                            offer: { cashback, confirmTime, rateSymbol },
+                            serviceOfferId,
+                        };
                     }
                 });
-            })
-        }
-
-
+                return tempService;
+            });
+        },
     },
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

@@ -6,7 +6,7 @@ export default {
 
     asyncComputed: {
         async routesByTab() {
-            const routes = await localGet('routesByTab');
+            const routes = await localGet('tabsInfo');
             await this.changeRoute(routes);
             return routes;
         },
@@ -15,8 +15,8 @@ export default {
     methods: {
         async changeRoute(routeTabs) {
             const tabId = await getTabInfo('id');
-            const routeName = routeTabs[tabId] || 'cashback';
-            return this.$router.push('cashback');
+            const routeName = routeTabs[tabId];
+            return this.$router.push(routeName);
         },
     },
 

@@ -1,7 +1,7 @@
 <template>
-    <a-tabs defaultActiveKey="/cashback" @change="toRoute">
-        <a-tab-pane tab="Кэшбэк" key="/cashback"/>
-        <a-tab-pane tab="Промокоды" key="/promocodes"/>
+    <a-tabs defaultActiveKey="/services" @change="toRoute">
+        <a-tab-pane tab="Кэшбэк" key="/services" />
+        <a-tab-pane tab="Промокоды" key="/promocodes" />
     </a-tabs>
 </template>
 <script>
@@ -10,17 +10,17 @@ export default {
         return {
             tabs: [
                 {
-                    link: '/cashback',
+                    link: '/services',
                     text: '',
-                    routeName: '/cashback',
+                    routeName: '/services',
                 },
                 {
                     link: '/promocodes',
                     text: '',
                     routeName: 'promocodes',
                 },
-            ]
-        }
+            ],
+        };
     },
 
     computed: {
@@ -32,12 +32,12 @@ export default {
             return this.isLogin && this.routeName !== 'no-offer';
         },
     },
-    
+
     methods: {
         toRoute(route) {
-            this.$router.push(route);
-        }
-    }
+            this.$router.push(route, () => {});
+        },
+    },
 };
 </script>
 <style lang="scss" scoped>

@@ -6,18 +6,36 @@ class Main {
         this.store = store;
         this.offers = new Offers(store);
         this.services = new Services(store);
+
+        this.tabsInfo = {};
         this.init();
     }
 
     async init() {
+        await this.offers.getOffers();
         this.services.getServices();
-        this.offers.getOffers();
-        // this.updateAllTabs();
+        this.updateAllTabs();
         browser.webNavigation.onBeforeNavigate.addListener(this.beforeNavigateHandler.bind(this));
+        browser.webNavigation.onDOMContentLoaded.addListener(this.contentLoadHandler.bind(this));
     }
 
     beforeNavigateHandler({ url }) {
         // Летишопс тянет кэшбэк отдельно для каждого оффера
+    }
+
+    /**
+     * @param {Object} tabDetail
+     * @returns {Boolean}
+     */
+    contentLoadHandler({ tabId, url, frameId }) {
+        if (frameId !== 0) return false;
+        this.tabInfoUpdater(tabId, url);
+        this.setTabsInfoInStorage();
+        return true;
+    }
+
+    setTabsInfoInStorage() {
+        return browser.storage.local.set({ tabsInfo: this.tabsInfo });
     }
 
     /**
@@ -51,8 +69,8 @@ class Main {
         const text = isAllow ? 'yes' : ' X ';
         browser.browserAction.setBadgeBackgroundColor({ color, tabId });
         browser.browserAction.setBadgeText({ text, tabId });
-        // Запишем инфу о табах (оффер или не оффер)
-        this.routesByTab[tabId] = isAllow ? 'link' : 'no-offer';
+        // Запишем инфу о табах, если страница оффера - services, если нет, то offers
+        this.tabsInfo[tabId] = isAllow ? 'services' : 'offers';
     }
 }
 

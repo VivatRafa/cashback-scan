@@ -1,30 +1,37 @@
 import index from './pages/index';
-import cashback from './pages/cashback';
-import serviceDetail from './pages/service-detail';
-import noCashback from './pages/no-cashback';
-import promocodes from './pages/promocodes';
+import services from './pages/services/services';
+import serviceDetail from './pages/service-detail/service-detail';
+import offers from './pages/offers/offers';
+import offerDetail from './pages/offer-detail/offer-detail';
+import promocodes from './pages/promocodes/promocodes';
 
 export default [
     {
         path: '/',
         name: 'index',
-        component: cashback,
+        component: index,
     },
     {
-        path: '/cashback',
-        name: 'cashback',
-        component: cashback,
+        path: '/services',
+        name: 'services',
+        component: services,
     },
     {
         path: '/service/:id',
         name: 'service',
         component: serviceDetail,
-        props: route => ({ id: Number(route.params.id) }),
+        props: route => ({ serviceOfferId: Number(route.params.id) }),
     },
     {
-        path: '/no-cashback',
-        name: 'no-cashback',
-        component: noCashback,
+        path: '/offers',
+        name: 'offers',
+        component: offers,
+    },
+    {
+        path: '/offer/:id',
+        name: 'offer',
+        component: offerDetail,
+        props: route => ({ offerId: Number(route.params.id) }),
     },
     {
         path: '/promocodes',

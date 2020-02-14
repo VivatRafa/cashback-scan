@@ -2,50 +2,46 @@
     <div class="plugin-content">
         <a-card v-if="service">
             <div class="wrap">
-                <div  :style="{ backgroundColor: bgColor }" class="logo">
-                    <img :src="service.logo.src">
+                <div class="logo">
+                    <img :src="service.logo" />
                 </div>
                 <div class="info">
                     <div class="panel">
-                        <div class="name">{{ service.title }}</div>
-                        <a-button type="primary" @click="toServicesList"><a-icon type="close" /></a-button>
+                        <div class="name">{{ service.name }}</div>
+                        <a-button type="primary" @click="toServicesList">
+                            <a-icon type="close" />
+                        </a-button>
                     </div>
-                    <div class="confirm">Период подтвреждения {{ service.confirmTime }}</div>
-                    <div class="cashback">Кэшбэк {{ service.cashback }}</div>
+                    <div class="confirm">Период подтвреждения: {{ service.offer.confirmTime || 'уточняем' }}</div>
+                    <div class="cashback">Кэшбэк (до) {{ addSignToString(service.offer.cashback, service.offer.rateSymbol) }}</div>
                 </div>
             </div>
             <a-divider type="horizontal">Категории</a-divider>
             <div class="category">
-                <div class="item">
-                    <div class="name">Категория 1</div>
-                    <div class="value">1%</div>
-                </div>
-                <div class="item">
-                    <div class="name">Категория 2</div>
-                    <div class="value">3%</div>
-                </div>
-                <div class="item">
-                    <div class="name">Категория 3</div>
-                    <div class="value">5%</div>
+                <div class="item" v-for="rate in service.offer.rates" :key="rate.name">
+                    <div class="name" v-html="rate.name"></div>
+                    <div class="value">{{ rate.value }}</div>
                 </div>
             </div>
-            <a-divider type="horizontal">Уточнения от сервиса</a-divider>
+            <div v-if="service.offer.conditions">
+                <a-divider type="horizontal">Уточнения от сервиса</a-divider>
                 <div class="details">
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nostrum consequatur quod distinctio. Quasi fugit aliquid, recusandae voluptates sit eveniet inventore.
+                    {{ service.offer.conditions }}
                 </div>
+            </div>
             <a-divider type="horizontal" />
-                <a-button type="primary" class="btn-center">Перейти на сайт</a-button>
+            <a-button type="primary" class="btn-center">Перейти на сайт</a-button>
             <a-divider type="horizontal" />
         </a-card>
     </div>
 </template>
 
 <script>
-import { bgPage } from '~/helpers';
+import { bgPage, addSignToString } from '~/helpers';
 
 export default {
     props: {
-        id: {
+        serviceOfferId: {
             required: true,
             validator: value => typeof value === 'number',
         },
@@ -53,23 +49,28 @@ export default {
 
     data() {
         return {
-            service: {},
-        }
-    },
-    computed: {
-        bgColor() {
-            return this.service?.logo?.bgColor || 'none';
-        }
+            service: null,
+        };
     },
 
     methods: {
+        addSignToString,
         toServicesList() {
-            this.$router.push('/cashback');
-        }
+            this.$router.push('/services');
+        },
     },
 
     created() {
-        this.service = bgPage.serviceData.getService(this.id);
+        const { offer, serviceOffer } = bgPage.offers.getServiceOffer(this.serviceOfferId) || {};
+        if (!offer || !serviceOffer) return;
+        const service = bgPage.services.getService(serviceOffer.serviceId);
+        if (!service) return;
+        const { cashback, rates, confirmTime, conditions } = serviceOffer || {};
+        const { rateSymbol } = offer;
+        this.service = {
+            ...service,
+            offer: { cashback, rates, confirmTime, rateSymbol, conditions },
+        };
     },
 };
 </script>
@@ -123,15 +124,26 @@ export default {
 .category {
     .item {
         display: flex;
+        align-items: center;
         font-size: 14px;
         font-weight: 500;
+        padding-bottom: 5px;
         margin-bottom: 5px;
+        border-bottom: 1px solid #e8e8e8;
         &:last-child {
             margin-bottom: 0;
+            border-bottom: 0;
         }
-        div {
-            width: 50%;
-        }
+    }
+    .name {
+        width: 100%;
+    }
+    .value {
+        max-width: 85px;
+        width: 100%;
+        padding-left: 10px;
+        text-align: center;
+        font-size: 18px;
     }
 }
 .ant-btn {

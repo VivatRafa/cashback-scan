@@ -1,20 +1,17 @@
 <template>
     <div class="plugin-content">
-        im a no-cashback
+        im a promocodes
     </div>
 </template>
 
 <script>
 export default {
     data() {
-        return {
-            
-        }
+        return {};
     },
     computed: {},
     methods: {},
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>
