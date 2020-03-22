@@ -59,7 +59,8 @@ class Main {
      */
     tabInfoUpdater(tabId, tabUrl) {
         const isAllow = this.offers.checkUrlForOffer(tabUrl);
-
+        console.log(tabUrl, isAllow);
+        
         const badgeColors = {
             active: '#64c270',
             inactive: '#e42014',

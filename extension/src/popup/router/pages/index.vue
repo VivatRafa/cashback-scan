@@ -15,7 +15,7 @@ export default {
     methods: {
         async changeRoute(routeTabs) {
             const tabId = await getTabInfo('id');
-            const routeName = routeTabs[tabId];
+            const routeName = routeTabs[tabId] || 'offers';
             return this.$router.push(routeName);
         },
     },

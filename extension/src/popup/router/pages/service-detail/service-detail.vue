@@ -25,9 +25,7 @@
             </div>
             <div v-if="service.offer.conditions">
                 <a-divider type="horizontal">Уточнения от сервиса</a-divider>
-                <div class="details">
-                    {{ service.offer.conditions }}
-                </div>
+                <div class="details" v-html="service.offer.conditions"></div>
             </div>
             <a-divider type="horizontal" />
             <a-button type="primary" class="btn-center">Перейти на сайт</a-button>
@@ -144,6 +142,14 @@ export default {
         padding-left: 10px;
         text-align: center;
         font-size: 18px;
+    }
+}
+.details {
+    font-size: 14px !important;
+    & > * {
+        font-weight: inherit;
+        text-transform: lowercase;
+        font-size: 14px !important;
     }
 }
 .ant-btn {

@@ -4,7 +4,8 @@ import { Service } from '../interfaces/service.interface';
 export class SmartSaleService {
     offersList: Offer[];
     offer: Offer;
-    constructor() {}
+    constructor() {
+    }
 
     async getOffer(): Promise<Boolean> {
         return true;

@@ -10,17 +10,20 @@ export class Offer {
     @Column({ length: 500 })
     name: string;
 
-    @Column({ length: 500 })
+    @Column({ length: 500, default: null })
     url: string;
 
-    @Column({ length: 500, default: '' })
+    @Column({ length: 500, default: null })
     affiliateLink: string;
 
-    @Column({ length: 500 })
+    @Column({ length: 500, default: null })
     logo: string;
 
-    @Column({ length: 500, default: '' })
+    @Column({ length: 500, default: null })
     rateSymbol: string;
+
+    @Column('int', { default: 100 })
+    priority: number;
 
     @RegExpColumn()
     linkMatch: RegExp;

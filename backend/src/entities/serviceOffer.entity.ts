@@ -33,11 +33,10 @@ export class ServiceOffer {
     })
     confirmTime: string;
 
-    @Column('text')
+    @Column('text', { default: null })
     rates: string;
 
-    @Column({
-        length: 500,
+    @Column('text', {
         default: null,
     })
     conditions: string;

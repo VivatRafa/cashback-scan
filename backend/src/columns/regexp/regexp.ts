@@ -17,6 +17,7 @@ export namespace RegExpStringTransformer {
                 throw new Error(`"${value}" is not a regular expression`);
             }
         } catch (e) {
+            // Да здравствуют танцы с бубном (надо для особых регулярок в которых есть экранироние '-')
             return new RegExp(value.slice(1, -3).replace(/\\-/g, '-'), 'iu');
         }
     }

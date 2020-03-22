@@ -1,6 +1,6 @@
 <template>
     <div class="plugin-content">
-        Магазинчики
+        <div class="offers-title">Магазины</div>
         <div class="offers-list">
             <offer v-for="offer in offers" :key="offer.id" :offer="offer" />
         </div>
@@ -27,6 +27,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.offers-title {
+    text-align: center;
+    font-weight: 700;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
 .offers-list {
     display: flex;
     flex-wrap: wrap;

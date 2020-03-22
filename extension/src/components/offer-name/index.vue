@@ -9,7 +9,7 @@ export default {
     data() {
         return {
             offerName: null,
-        }
+        };
     },
 
     asyncComputed: {
@@ -18,10 +18,6 @@ export default {
             return bgPage.offers.getOffer(url, 'name');
         },
     },
-
-    mounted() {
-        
-    }
 };
 </script>
 

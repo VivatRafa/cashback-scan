@@ -1,5 +1,5 @@
-import { GET_OFFER, GET_OFFERS } from '~/store/offers/events';
 import cloneDeep from 'lodash/cloneDeep';
+import { GET_OFFER, GET_OFFERS } from '~/store/offers/events';
 
 /**
  * @class Offers
@@ -56,9 +56,18 @@ class Offers {
 
     getOffer(link, property = null) {
         if (!link) return null;
-        const offer = this.cache.offers.find(({ linkMatch }) => linkMatch.test(link));
-        if (!offer) return null;
-        return property ? offer[property] : cloneDeep(offer);
+        try {
+            // типо aliexpress
+            const [domain] = new URL(link).host.split('.');
+            const offer = this.cache.offers.find(({ url }) => {
+                const [offerDomain] = new URL(url).host.split('.');
+                return offerDomain === domain;
+            });
+            if (!offer) return null;
+            return property ? offer[property] : cloneDeep(offer);
+        } catch (error) {
+            return null;
+        }
     }
 
     checkUrlForOffer(url) {
