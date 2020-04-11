@@ -1,3 +1,4 @@
+import { prepareUrl } from './../../helpers/index';
 import { HttpService, Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -53,7 +54,6 @@ export class Cash4brandsService {
                             if (!cashback) return;
                             const rates = JSON.stringify(offer?.pctable?.map(({ pc, title }) => 
                                 ({ name: title, value: pc })));
-                            const linkMatch = /emptyregexp/;
                             const [rateSymbol] = offer?.offers__ufp?.ufp.match(/%|р/);
                             const conditions = offer.text;
 
@@ -61,7 +61,6 @@ export class Cash4brandsService {
                                 id: offer.id,
                                 offer: {
                                     name: offer?.title,
-                                    linkMatch,
                                     logo: offer?.image_small,
                                     rateSymbol,
                                 },
@@ -85,7 +84,8 @@ export class Cash4brandsService {
                     if (findedOffer) {
                         // Удалим id cash4brands
                         delete offerData.id;
-                        [offerData.offer.url] = findedOffer.urls;
+                        const [url] = findedOffer.urls;
+                        offerData.offer.url = prepareUrl(url)
                         result.push(offerData);
                     }
                     return result

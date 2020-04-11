@@ -1,3 +1,4 @@
+import { MegabonusService } from './minions/megabonus.service';
 import { KopikotService } from './minions/kopikot.service';
 import { LetyshopsService } from './minions/letyshops.service';
 import { Cash4brandsService } from './minions/cash4brands.service';
@@ -8,6 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { HttpService } from '@nestjs/common';
 import { BackitService } from './minions/backit.service';
 import { Repository, createQueryBuilder, getRepository } from 'typeorm';
+import { SecretDiscounterService } from './minions/secretDiscounter.service';
 
 export class MainService {
     services: object;
@@ -34,7 +36,7 @@ export class MainService {
         // Установим объект с id(именами) офферов и сервис офферов
         await this.initOffersListsIds();
         // Тянем список офферов
-        this.getAllOffers();
+        // this.getAllOffers();
     }
 
     async initServicesListAndApiUrl() {
@@ -43,20 +45,18 @@ export class MainService {
             .addSelect('Service.apiUrl')
             .getMany();
         // TODO сделать модель для этой херни
-        const apiUrls = {
-            backit: null,
-            letyshops: null,
-            kopikot: null,
-            cash4brands: null,
-        };
+        const apiUrls: { [key: string]: string } = {};
         this.servicesList.forEach(
             ({ name, apiUrl }) => (apiUrls[name.toLowerCase()] = apiUrl),
         );
         this.services = {
-            // backit: new BackitService(apiUrls.backit, this.httpService),
-            // kopikot: new KopikotService(apiUrls.kopikot, this.httpService),
-            // letyshops: new LetyshopsService(apiUrls.letyshops, this.httpService),
+            // Придумать как вытащить офферов, в ответе хуйня какая-то приходит
+            // megabonus: new MegabonusService(apiUrls.megabonus, this.httpService),
+            backit: new BackitService(apiUrls.backit, this.httpService),
+            kopikot: new KopikotService(apiUrls.kopikot, this.httpService),
+            letyshops: new LetyshopsService(apiUrls.letyshops, this.httpService),
             cash4brands: new Cash4brandsService(apiUrls.cash4brands, this.httpService),
+            secretdiscounter: new SecretDiscounterService(apiUrls.secretdiscounter, this.httpService),
         };
         
     }
@@ -83,14 +83,14 @@ export class MainService {
 
     async getAllOffers() {
         this.servicesList.forEach(async service => {
-            console.log(`Сервис: ${service.name}`);
+            console.info(`Сервис: ${service.name}`);
             // Получаем список офферов от каждого сервиса
             const serviceName = service.name.toLowerCase();
             const offersList = await this.services?.[serviceName]?.getOffers();
-            console.log(`Получили ответ от апи сервиса ${service.name}`);
+            console.info(`Получили ответ от апи сервиса ${service.name}`);
             // Должен вернуться список форматированных данных
             if (Array.isArray(offersList)) {
-                console.log(`Ответ ${service.name} успешный и отформатирован`);
+                console.info(`Ответ ${service.name} успешный и отформатирован`);
                 this.serviceOfferAction(service, offersList);
             }
         });

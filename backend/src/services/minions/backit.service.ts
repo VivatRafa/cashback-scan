@@ -1,3 +1,4 @@
+import { prepareUrl } from './../../helpers/index';
 import { HttpService, Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -27,9 +28,9 @@ export class BackitService {
             this.httpService
                 .get(`${this.apiUrl}/offers/list`, config)
                 .subscribe(resp => {
-                    const { status } = resp;
+                    const { status, data } = resp;
                     if (status === 200) {
-                        const offers = resp?.data?.data;
+                        const { data: offers } = data;
 
                         const formatedOffers = offers.map(offer => {
                             let rates = null;
@@ -55,8 +56,7 @@ export class BackitService {
                             return {
                                 offer: {
                                     name: offer?.attributes?.name,
-                                    url: offer?.attributes?.link_default,
-                                    linkMatch: offer?.attributes?.link_match,
+                                    url: prepareUrl(offer?.attributes?.link_default),
                                     logo: offer?.attributes?.image,
                                     rateSymbol:
                                         offer?.attributes?.cashbackRateSymbol,

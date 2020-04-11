@@ -1,6 +1,6 @@
 import cloneDeep from 'lodash/cloneDeep';
 import { GET_OFFER, GET_OFFERS } from '~/store/offers/events';
-
+const domainExceptions = ['google', 'ru', 'com'];
 /**
  * @class Offers
  * Полезная информация
@@ -18,9 +18,7 @@ class Offers {
 
     async getOffers() {
         const result = await this.store.dispatch(`offers/${GET_OFFERS}`);
-        if (result) {
-            this.cache.offers = this.convertRegexpsInOffers(this.store?.state?.offers?.offers);
-        }
+        if (result) this.cache.offers = this.store?.state?.offers?.offers;
         return result;
     }
 
@@ -54,14 +52,29 @@ class Offers {
         });
     }
 
+    getDomain(link = '') {
+        if (!link) return '';
+        try {
+            let domainName = null;
+            const urlParts = new URL(link).host.split('.');
+            if (urlParts.length > 2) [, domainName] = urlParts;
+            else [domainName] = urlParts;
+            if (domainExceptions.includes(domainName)) return null;
+            return domainName;
+        } catch (e) {
+            throw new Error(e);
+        }
+    }
+
     getOffer(link, property = null) {
         if (!link) return null;
         try {
             // типо aliexpress
-            const [domain] = new URL(link).host.split('.');
+            const domain = this.getDomain(link);
+            if (!domain) return null;
             const offer = this.cache.offers.find(({ url }) => {
-                const [offerDomain] = new URL(url).host.split('.');
-                return offerDomain === domain;
+                const offerDomain = this.getDomain(url);
+                return offerDomain ? offerDomain === domain : false;
             });
             if (!offer) return null;
             return property ? offer[property] : cloneDeep(offer);

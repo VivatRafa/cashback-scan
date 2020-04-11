@@ -22,7 +22,7 @@ import { OffersModule } from './offers/offers.module';
             // TODO namingStrategy: new CamelCaseNamingStrategy(), вот ты хуй найдешь, в каком месте эта хуйня задает имя полям, которую тянутся с базы, надо найти
         }),
         ScheduleModule.register({}),
-        // ScheduleServiceModule,
+        ScheduleServiceModule,
         ServiceModule,
         ServicesModule,
         OffersModule,

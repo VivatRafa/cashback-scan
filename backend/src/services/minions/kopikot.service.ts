@@ -1,4 +1,5 @@
 import { HttpService, Injectable } from '@nestjs/common';
+import { prepareUrl } from '../../helpers';
 
 @Injectable()
 export class KopikotService {
@@ -45,7 +46,6 @@ export class KopikotService {
                                 id: offer?.id,
                                 offer: {
                                     name: offer?.title,
-                                    linkMatch: /emptyregexp/,
                                     logo: offer?.image?.url,
                                     rateSymbol: offer?.commission?.max?.unit,
                                 },
@@ -76,7 +76,7 @@ export class KopikotService {
                 if (findedOffer && url) {
                     // Удаляем id копикота
                     delete offerData.id;
-                    offerData.offer.url = url;
+                    offerData.offer.url = prepareUrl(url);
                     result.push(offerData);
                 }
                 return result;

@@ -1,7 +1,7 @@
 <template>
     <a-card hoverable>
         <div class="wrap">
-            <div class="logo">
+            <div :class="['logo', { black: darkLogoService.includes(service.name) }]">
                 <img :src="service.logo" />
             </div>
             <div class="info">
@@ -28,7 +28,9 @@ export default {
         },
     },
     data() {
-        return {};
+        return {
+            darkLogoService: ['Kopikot', 'SecretDiscounter'],
+        };
     },
     computed: {
         bgColor() {
@@ -65,8 +67,12 @@ export default {
         align-items: center;
         justify-content: center;
         margin-right: 15px;
+        border-radius: 3px;
         img {
             max-width: 90%;
+        }
+        &.black {
+            background-color: #000;
         }
     }
     .confirm {

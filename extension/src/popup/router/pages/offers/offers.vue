@@ -21,7 +21,6 @@ export default {
 
     created() {
         this.offers = bgPage.offers.getTopOffers();
-        console.log(this.offers);
     },
 };
 </script>

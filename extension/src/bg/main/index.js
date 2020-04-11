@@ -59,15 +59,14 @@ class Main {
      */
     tabInfoUpdater(tabId, tabUrl) {
         const isAllow = this.offers.checkUrlForOffer(tabUrl);
-        console.log(tabUrl, isAllow);
-        
+
         const badgeColors = {
             active: '#64c270',
             inactive: '#e42014',
         };
 
         const color = isAllow ? badgeColors.active : badgeColors.inactive;
-        const text = isAllow ? 'yes' : ' X ';
+        const text = isAllow ? '=)' : ' =( ';
         browser.browserAction.setBadgeBackgroundColor({ color, tabId });
         browser.browserAction.setBadgeText({ text, tabId });
         // Запишем инфу о табах, если страница оффера - services, если нет, то offers

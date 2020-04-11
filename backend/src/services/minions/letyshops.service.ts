@@ -1,4 +1,5 @@
 import { HttpService } from '@nestjs/common';
+import { prepareUrl } from '../../helpers';
 
 export class LetyshopsService {
     offersParams: object;
@@ -30,15 +31,14 @@ export class LetyshopsService {
                         
                         // Какие ублюдки называют поля одной буквой? правильно letyshops                        
                         const formatedOffers = offers.map(offer => {
-                            const { a: name, c: url, d: logo, p: { a: cashback, d: rateSymbol, f: ratesInfo } } = offer;
+                            const { a: name, c, d: logo, p: { a: cashback, d: rateSymbol, f: ratesInfo } } = offer;
                             const rates = JSON.stringify(ratesInfo?.map(({ description, rate }) => ({ name: description, value: rate })));
-                            const linkMatch = /emptyregexp/;
+                            const url = prepareUrl(c);
                             return {
                                 offer: {
                                     name,
                                     url,
                                     logo,
-                                    linkMatch,
                                     rateSymbol,
                                 },
                                 serviceOfferInfo: { rates, cashback },

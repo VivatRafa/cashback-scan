@@ -25,8 +25,8 @@ export class Offer {
     @Column('int', { default: 100 })
     priority: number;
 
-    @RegExpColumn()
-    linkMatch: RegExp;
+    // @RegExpColumn()
+    // linkMatch: RegExp;
 
     @OneToMany(type => ServiceOffer, serviceOffer => serviceOffer.offer)
     serviceOffers: number[];

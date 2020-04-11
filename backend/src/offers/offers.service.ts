@@ -43,9 +43,7 @@ export class OffersService {
                 return { msg: 'link invalid' };
             }
             const offersList = await this.offerRepository.find();
-            const offer = offersList.find(({ linkMatch }) =>
-                linkMatch.test(link),
-            );
+            const offer = { id: 1 };
             const { id } = offer || {};
             if (!id) return { msg: 'offer doesnt exist' };
             const serviceOffers = await this.serviceOfferRepository.find({
@@ -59,9 +57,6 @@ export class OffersService {
 
     async getOffers() {
         const offersList = await this.offerRepository.find();
-        return offersList.map(offer => ({
-            ...offer,
-            linkMatch: offer.linkMatch.toString(),
-        }));
+        return [...offersList];
     }
 }
