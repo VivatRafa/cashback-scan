@@ -15,7 +15,7 @@ import { OffersModule } from './offers/offers.module';
             host: 'localhost',
             port: 3306,
             username: 'root',
-            insecureAuth: true,
+            password: 'admin',
             database: 'cashback',
             entities: [__dirname + '/**/*.entity{.ts,.js}'],
             synchronize: true,
