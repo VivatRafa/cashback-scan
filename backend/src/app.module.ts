@@ -15,11 +15,10 @@ import { OffersModule } from './offers/offers.module';
             host: 'localhost',
             port: 3306,
             username: 'root',
-            password: 'admin',
+            insecureAuth: true,
             database: 'cashback',
             entities: [__dirname + '/**/*.entity{.ts,.js}'],
             synchronize: true,
-            // TODO namingStrategy: new CamelCaseNamingStrategy(), вот ты хуй найдешь, в каком месте эта хуйня задает имя полям, которую тянутся с базы, надо найти
         }),
         ScheduleModule.register({}),
         ScheduleServiceModule,
