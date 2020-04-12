@@ -11,9 +11,8 @@ export class ScheduleService extends NestSchedule {
         super();
     }
 
-    @Cron('* * * * *', { startTime: new Date(), key: 'schedule-cron' })
+    @Cron('0 * * * *', { startTime: new Date(), key: 'schedule-cron' })
     async cronJob() {
         this.mainService.getAllOffers();
-        console.info('im woking :)')
     }
 }

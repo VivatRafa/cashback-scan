@@ -1,4 +1,4 @@
 export const common = {
     allowLang: ['ru'],
-    apiUrl: 'http://127.0.0.1:3000',
+    apiUrl: 'http://45.84.227.81',
 };
