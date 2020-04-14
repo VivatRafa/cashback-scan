@@ -36,7 +36,7 @@ export class MainService {
         // Установим объект с id(именами) офферов и сервис офферов
         await this.initOffersListsIds();
         // Тянем список офферов
-        // this.getAllOffers();
+        this.getAllOffers();
     }
 
     async initServicesListAndApiUrl() {
