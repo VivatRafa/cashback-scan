@@ -8,7 +8,7 @@
                 <div class="name">{{ service.name }}</div>
                 <div class="confirm">Период подтвреждения: {{ service.offer.confirmTime || 'уточняем' }}</div>
                 <div class="cashback">
-                    Кэшбэк (до)
+                    Кэшбэк {{ service.offer.isRatesMoreThanOne ? 'до' : '' }}
                     {{ addSignToString(service.offer.cashback, service.offer.rateSymbol) }}
                 </div>
                 <a-button @click="toService(service.serviceOfferId)" type="link">Подробнее</a-button>

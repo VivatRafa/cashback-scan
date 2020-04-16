@@ -69,6 +69,8 @@ export default {
                 let name = '';
                 let cashback = 0;
                 services.forEach(service => {
+                    console.log(service);
+                    
                     if (serviceOffer.serviceId === service.id) {
                         name = service.name;
                         cashback = serviceOffer.cashback;

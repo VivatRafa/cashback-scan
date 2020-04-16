@@ -39,19 +39,21 @@ export default {
             const { offer, serviceOffers } = (await bgPage.offers.getServiceOffersAndOfferBy({ url })) || {};
 
             if (!offer || !serviceOffers) return null;
-
+            console.log(serviceOffers);
+            
             const serviceIds = serviceOffers.map(({ serviceId }) => serviceId);
             const services = bgPage.services.getServicesByIds(serviceIds);
-
+            console.log(services);
             this.services = services.map(service => {
                 let tempService = { ...service };
                 serviceOffers.forEach(serviceOffer => {
                     if (service.id === serviceOffer.serviceId) {
-                        const { id: serviceOfferId, cashback, confirmTime } = serviceOffer;
+                        const { id: serviceOfferId, cashback, confirmTime, rates } = serviceOffer;
                         const { id: offerId, rateSymbol } = offer;
+                        const isRatesMoreThanOne = rates?.length > 1;
                         tempService = {
                             ...tempService,
-                            offer: { cashback, confirmTime, rateSymbol },
+                            offer: { cashback, confirmTime, rateSymbol, isRatesMoreThanOne },
                             serviceOfferId,
                         };
                     }

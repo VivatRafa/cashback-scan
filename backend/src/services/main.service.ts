@@ -56,7 +56,6 @@ export class MainService {
             kopikot: new KopikotService(apiUrls.kopikot, this.httpService),
             letyshops: new LetyshopsService(apiUrls.letyshops, this.httpService),
             cash4brands: new Cash4brandsService(apiUrls.cash4brands, this.httpService),
-            secretdiscounter: new SecretDiscounterService(apiUrls.secretdiscounter, this.httpService),
         };
         
     }
@@ -112,6 +111,7 @@ export class MainService {
                     const [findedOffer] = await this.offerRepository.find({
                         name: offer.name,
                     });
+                    console.log(offer);
                     // Обновляем его
                    await this.offerRepository.update(findedOffer.id, offer);
                     // Достаем существующий оффер с обновленными данными

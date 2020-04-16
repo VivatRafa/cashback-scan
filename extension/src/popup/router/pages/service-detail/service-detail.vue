@@ -145,12 +145,7 @@ export default {
     }
 }
 .details {
-    font-size: 14px !important;
-    & > * {
-        font-weight: inherit;
-        text-transform: lowercase;
-        font-size: 14px !important;
-    }
+    font-size: 14px;
 }
 .ant-btn {
     font-size: 12px;

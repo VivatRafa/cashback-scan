@@ -61,12 +61,12 @@ class Main {
         const isAllow = this.offers.checkUrlForOffer(tabUrl);
 
         const badgeColors = {
-            active: '#64c270',
+            active: '#00C90D',
             inactive: '#e42014',
         };
 
         const color = isAllow ? badgeColors.active : badgeColors.inactive;
-        const text = isAllow ? '=)' : ' =( ';
+        const text = isAllow ? '✓' : '⛔'; // ✅
         browser.browserAction.setBadgeBackgroundColor({ color, tabId });
         browser.browserAction.setBadgeText({ text, tabId });
         // Запишем инфу о табах, если страница оффера - services, если нет, то offers

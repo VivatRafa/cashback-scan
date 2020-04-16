@@ -3,3 +3,21 @@
     padding: 0;
     box-sizing: border-box;
 }
+
+.details {
+    p,
+    span,
+    ul,
+    li,
+    strong {
+        font-weight: inherit;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        font-size: 14px !important;
+        color: rgba(0, 0, 0, 0.65)!important;
+    }
+    br {
+        display: none;
+    }
+}
