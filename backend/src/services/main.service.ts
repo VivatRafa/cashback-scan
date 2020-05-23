@@ -9,7 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { HttpService } from '@nestjs/common';
 import { BackitService } from './minions/backit.service';
 import { Repository, createQueryBuilder, getRepository } from 'typeorm';
-import { SecretDiscounterService } from './minions/secretDiscounter.service';
+import { SkidkaService } from './minions/skidka.service';
 
 export class MainService {
     services: object;
@@ -56,6 +56,7 @@ export class MainService {
             kopikot: new KopikotService(apiUrls.kopikot, this.httpService),
             letyshops: new LetyshopsService(apiUrls.letyshops, this.httpService),
             cash4brands: new Cash4brandsService(apiUrls.cash4brands, this.httpService),
+            skidka: new SkidkaService(this.httpService, apiUrls.skidka, this.offerRepository),
         };
         
     }
@@ -80,18 +81,21 @@ export class MainService {
         });
     }
 
-    async getAllOffers() {
-        this.servicesList.forEach(async service => {
+    getAllOffers() {
+        this.servicesList.forEach(service => {
             console.info(`Сервис: ${service.name}`);
             // Получаем список офферов от каждого сервиса
             const serviceName = service.name.toLowerCase();
-            const offersList = await this.services?.[serviceName]?.getOffers();
-            console.info(`Получили ответ от апи сервиса ${service.name}`);
-            // Должен вернуться список форматированных данных
-            if (Array.isArray(offersList)) {
-                console.info(`Ответ ${service.name} успешный и отформатирован`);
-                this.serviceOfferAction(service, offersList);
-            }
+            const serviceResp = this.services?.[serviceName]?.getOffers();
+            serviceResp?.then(offers => {                
+                console.info(`Получили ответ от апи сервиса ${service.name}`);
+                if (Array.isArray(offers)) {
+                    // Должен вернуться список форматированных данных
+                    console.info(`Ответ ${service.name} успешный и отформатирован`);
+                    // this.serviceOfferAction(service, offersList);
+                }
+            })
+            
         });
     }
 
@@ -111,7 +115,9 @@ export class MainService {
                     const [findedOffer] = await this.offerRepository.find({
                         name: offer.name,
                     });
-                    console.log(offer);
+                    // Устанавливаем/обновляем лого только от летишопс(если магазин есть в летишопс)
+                    const [findedServiceOffer] = await this.serviceOfferRepository.find({ offerId: findedOffer.id, serviceId: service.id})
+                    if (findedServiceOffer && service.id !== 2) delete offer.logo;
                     // Обновляем его
                    await this.offerRepository.update(findedOffer.id, offer);
                     // Достаем существующий оффер с обновленными данными

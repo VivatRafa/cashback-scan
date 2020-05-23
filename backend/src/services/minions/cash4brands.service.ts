@@ -50,11 +50,11 @@ export class Cash4brandsService {
                     const { status, data: offers } = resp;
                     if (status === 200) {
                         const formatedOffers = offers.map(offer => {
-                            const cashback = this.getCashbackFromString(offer?.offers__ufp?.ufp);
+                            const cashback = this?.getCashbackFromString(offer?.offers__ufp?.ufp);
                             if (!cashback) return;
                             const rates = JSON.stringify(offer?.pctable?.map(({ pc, title }) => 
                                 ({ name: title, value: pc })));
-                            const [rateSymbol] = offer?.offers__ufp?.ufp.match(/%|р/);
+                            const [rateSymbol] = offer?.offers__ufp?.ufp.match(/%|р/) || [];
                             const conditions = offer.text;
 
                             return {
