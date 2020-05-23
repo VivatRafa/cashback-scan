@@ -7,8 +7,9 @@
 
 <script>
 import appHeader from '~/components/header';
+
 export default {
-    components: {appHeader},
+    components: { appHeader },
     data() {
         return {};
     },

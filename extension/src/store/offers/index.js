@@ -1,9 +1,10 @@
 /* eslint-disable no-shadow */
-import { GET_OFFERS, GET_OFFER } from './events';
+import { GET_OFFERS, GET_OFFER, GET_TOP_OFFERS } from './events';
 import * as types from './mutations-types';
 
 const state = {
     offers: [],
+    topOffers: [],
     serviceOfferAndOffer: null,
     offersIsLoaded: true,
 };
@@ -15,6 +16,17 @@ const actions = {
         if (resp.ok) {
             const data = await resp.json();
             commit(types.SET_OFFERS_DATA, data);
+        }
+
+        return resp.ok;
+    },
+
+    [GET_TOP_OFFERS]: async ({ commit }) => {
+        const resp = await browser.api.get('/top-offers');
+
+        if (resp.ok) {
+            const data = await resp.json();
+            commit(types.SET_TOP_OFFERS_DATA, data);
         }
 
         return resp.ok;
@@ -43,6 +55,9 @@ const mutations = {
     },
     [types.SET_OFFERS_IS_LOADING](state, value) {
         state.offersIsLoading = value;
+    },
+    [types.SET_TOP_OFFERS_DATA](state, value) {
+        state.topOffers = value;
     },
     [types.SET_SERVICE_OFFER_DATA](state, value) {
         const { offer, serviceOffers } = value;

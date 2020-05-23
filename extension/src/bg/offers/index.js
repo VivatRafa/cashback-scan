@@ -1,5 +1,6 @@
 import cloneDeep from 'lodash/cloneDeep';
-import { GET_OFFER, GET_OFFERS } from '~/store/offers/events';
+import { GET_OFFER, GET_OFFERS, GET_TOP_OFFERS } from '~/store/offers/events';
+
 const domainExceptions = ['google', 'ru', 'com'];
 /**
  * @class Offers
@@ -10,20 +11,35 @@ class Offers {
     constructor(store) {
         this.store = store;
         this.cache = {
+            searchOptions: [],
             offers: [],
             expire: 0,
             serviceOffers: {},
+            topOffers: [],
         };
     }
 
     async getOffers() {
         const result = await this.store.dispatch(`offers/${GET_OFFERS}`);
-        if (result) this.cache.offers = this.store?.state?.offers?.offers;
+        if (result) {
+            const offers = this.store?.state?.offers?.offers;
+            this.cache.offers = offers;
+            this.cache.searchOptions = offers.map(({ name: label, id: value }) => ({ label: label.toLowerCase(), value: `${value}` }));
+        }
         return result;
     }
 
-    getTopOffers() {
-        if (this.cache.offers.length) return this.cache.offers.slice(0, 10);
+    async getTopOffers() {
+        const result = await this.store.dispatch(`offers/${GET_TOP_OFFERS}`);
+        if (result) {
+            const offers = this.store?.state?.offers?.topOffers;
+            this.cache.topOffers = offers || [];
+        }
+        return result;
+    }
+
+    getTopOfferFromCache() {
+        return this.cache.topOffers;
     }
 
     /**
@@ -50,6 +66,12 @@ class Offers {
                 linkMatch,
             };
         });
+    }
+
+    search(str) {
+        if (!str) return [];
+        const lowerStr = str.toLowerCase();
+        return this.cache.searchOptions.filter(({ label }) => label.includes(lowerStr));
     }
 
     getDomain(link = '') {

@@ -14,4 +14,9 @@ export class OffersController {
     async getOffers() {
         return this.offersService.getOffers();
     }
+
+    @Get('top-offers')
+    async getTopOffers() {
+        return this.offersService.getTopOffers();
+    }
 }

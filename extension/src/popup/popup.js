@@ -1,7 +1,7 @@
 import Vue from 'vue';
 
 // Ant design
-import { Input, Tabs, Button, Card, Divider, Icon } from 'ant-design-vue';
+import { Input, Tabs, Button, Card, Divider, Icon, AutoComplete, Select } from 'ant-design-vue';
 
 import AsyncComputed from 'vue-async-computed';
 
@@ -17,6 +17,8 @@ Vue.use(Button);
 Vue.use(Card);
 Vue.use(Divider);
 Vue.use(Icon);
+Vue.use(AutoComplete);
+Vue.use(Select);
 
 global.browser = require('webextension-polyfill');
 

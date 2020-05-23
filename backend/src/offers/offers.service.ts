@@ -3,7 +3,7 @@ import { ServiceOffer } from '../entities/serviceOffer.entity';
 import { Offer } from '../entities/offer.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 
 @Injectable()
 export class OffersService {
@@ -55,8 +55,24 @@ export class OffersService {
         }
     }
 
+    async getTopOffers() {        
+        const serviceOffersList = await this.serviceOfferRepository.find({
+            where: {
+                serviceId: 2,
+            },
+            take: 10 
+        });
+        const offerIds = serviceOffersList.map(({ offerId }) => offerId);
+        const offersList = await this.offerRepository.find({
+            where: {
+                id: In(offerIds),
+            },
+        });
+        return offersList;
+    }
+
     async getOffers() {
         const offersList = await this.offerRepository.find();
-        return [...offersList];
+        return offersList;
     }
 }

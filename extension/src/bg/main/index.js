@@ -13,6 +13,7 @@ class Main {
 
     async init() {
         await this.offers.getOffers();
+        this.offers.getTopOffers();
         this.services.getServices();
         this.updateAllTabs();
         browser.webNavigation.onBeforeNavigate.addListener(this.beforeNavigateHandler.bind(this));

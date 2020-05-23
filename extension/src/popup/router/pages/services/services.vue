@@ -39,11 +39,10 @@ export default {
             const { offer, serviceOffers } = (await bgPage.offers.getServiceOffersAndOfferBy({ url })) || {};
 
             if (!offer || !serviceOffers) return null;
-            console.log(serviceOffers);
-            
+
             const serviceIds = serviceOffers.map(({ serviceId }) => serviceId);
             const services = bgPage.services.getServicesByIds(serviceIds);
-            console.log(services);
+
             this.services = services.map(service => {
                 let tempService = { ...service };
                 serviceOffers.forEach(serviceOffer => {

@@ -18,6 +18,9 @@ export class Service {
     @Column('text')
     logo: string;
 
+    @Column('text')
+    referalLink: string;
+
     @OneToMany(type => ServiceOffer, serviceOffer => serviceOffer.service)
     serviceOffers: number[];
 }
