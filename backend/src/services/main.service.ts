@@ -92,7 +92,7 @@ export class MainService {
                 if (Array.isArray(offers)) {
                     // Должен вернуться список форматированных данных
                     console.info(`Ответ ${service.name} успешный и отформатирован`);
-                    // this.serviceOfferAction(service, offersList);
+                    this.serviceOfferAction(service, offers);
                 }
             })
             
