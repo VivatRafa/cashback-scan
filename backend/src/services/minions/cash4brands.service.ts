@@ -12,8 +12,6 @@ export class Cash4brandsService {
             start: 0,
             count: 1000,
         };
-        // https://cash4brands.ru/api/get_all_shops/
-        // const kek = 'https://cash4brands.ru/api/get_shops_list/?start=0&count=1000';
     }
 
     async getOffersUrls(): Promise<{ id, urls }[]> {

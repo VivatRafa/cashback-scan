@@ -56,17 +56,9 @@ export class OffersService {
     }
 
     async getTopOffers() {        
-        const serviceOffersList = await this.serviceOfferRepository.find({
-            where: {
-                serviceId: 2,
-            },
-            take: 10 
-        });
-        const offerIds = serviceOffersList.map(({ offerId }) => offerId);
         const offersList = await this.offerRepository.find({
-            where: {
-                id: In(offerIds),
-            },
+            order: { priority: 'ASC' },
+            take: 10 
         });
         return offersList;
     }

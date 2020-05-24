@@ -10,12 +10,14 @@ import { HttpService } from '@nestjs/common';
 import { BackitService } from './minions/backit.service';
 import { Repository, createQueryBuilder, getRepository } from 'typeorm';
 import { SkidkaService } from './minions/skidka.service';
+import { topOffersPriority, topOffersNameVariation } from '../config';
 
 export class MainService {
     services: object;
     servicesList: any[];
     offersListIds: Set<unknown>;
     serviceOffersListIds: Set<unknown>;
+    offersPriority: object;
     constructor(
         @InjectRepository(Offer)
         private readonly offerRepository: Repository<Offer>,
@@ -108,16 +110,23 @@ export class MainService {
         let offerWithId = null;
         // Следим за уникальностью офферов через id(имя в нижнем регистре)
         offersList.forEach(async ({ offer, serviceOfferInfo }) => {
-            const offerId = offer.name.toLowerCase();
+            // Фиксим названия топ офферов, другие не трогаются
+            const name = this.normalizaTopOfferName(offer.name);
+            // Устанавливаем приоритет (топ офферы)
+            const priority = this.getOfferPriorityByName(name);
+
+            offer = { ...offer, name, priority };
+            const offerId = name.toLowerCase();
+
             if (this.offersListIds.has(offerId)) {
                 try {
                     // Находим существующий оффер
-                    const [findedOffer] = await this.offerRepository.find({
-                        name: offer.name,
-                    });
+                    const [findedOffer] = await this.offerRepository.find({ name });
+
                     // Устанавливаем/обновляем лого только от летишопс(если магазин есть в летишопс)
                     const [findedServiceOffer] = await this.serviceOfferRepository.find({ offerId: findedOffer.id, serviceId: service.id})
                     if (findedServiceOffer && service.id !== 2) delete offer.logo;
+
                     // Обновляем его
                    await this.offerRepository.update(findedOffer.id, offer);
                     // Достаем существующий оффер с обновленными данными
@@ -174,5 +183,13 @@ export class MainService {
         const { rates, conditions, cashback } = serviceOfferInfo;
         let serviceOffer = new ServiceOffer();
         return { ...serviceOffer, offer, service, rates, cashback, conditions };
+    }
+
+    normalizaTopOfferName(name: string): string {
+        return Object.keys(topOffersNameVariation)
+        .find(offerName => topOffersNameVariation[offerName].includes(name.toLocaleLowerCase())) || name;
+    }
+    getOfferPriorityByName(name: string): number {
+        return topOffersPriority[name.toLocaleLowerCase()] || 100;
     }
 }
