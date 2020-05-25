@@ -69,8 +69,7 @@ const mutations = {
                     rates,
                 };
             } catch (e) {
-                debugger;
-                throw new Error(e);
+                return { ...serviceOffer };
             }
         });
         state.serviceOfferAndOffer = {

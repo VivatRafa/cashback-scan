@@ -24,7 +24,7 @@ export class SkidkaService {
 
                         // @ts-ignore
                         const ratesHtml = Array.from(parsedPage.querySelectorAll('.shop-detail__comission'));
-                        const rates = ratesHtml.map(rateHtml => {
+                        const ratesArray = ratesHtml.map(rateHtml => {
                             // @ts-ignore
                             const value = rateHtml.querySelector('.c-price__value .notranslate').innerHTML;
                             // @ts-ignore
@@ -32,6 +32,8 @@ export class SkidkaService {
 
                             return { name, value };
                         });
+
+                        const rates = JSON.stringify(ratesArray);
 
                         // @ts-ignore
                         const title = parsedPage.querySelector('.shop-detail__title').innerHTML;
