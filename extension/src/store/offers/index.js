@@ -34,7 +34,8 @@ const actions = {
 
     [GET_OFFER]: async ({ commit }, actionData) => {
         const params = actionData.data;
-
+        // TODO баг, задваивается запрос
+        if (!params) return;
         const resp = await browser.api.get('/offer', params);
 
         if (resp.ok) {
@@ -62,15 +63,14 @@ const mutations = {
     [types.SET_SERVICE_OFFER_DATA](state, value) {
         const { offer, serviceOffers } = value;
         const serviceOffersWithParsedRates = serviceOffers.map(serviceOffer => {
+            let result = { ...serviceOffer };
             try {
-                const rates = JSON.parse(serviceOffer.rates);
-                return {
-                    ...serviceOffer,
-                    rates,
-                };
+                const rates = typeof serviceOffer.rates === 'string' ? JSON.parse(serviceOffer.rates) : [];
+                result = { ...result, rates };
             } catch (e) {
-                return { ...serviceOffer };
+                throw new Error(e);
             }
+            return result;
         });
         state.serviceOfferAndOffer = {
             offer,

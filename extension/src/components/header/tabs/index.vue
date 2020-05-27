@@ -1,39 +1,33 @@
 <template>
-    <a-tabs defaultActiveKey="/services" @change="toRoute">
-        <a-tab-pane tab="Кэшбэк" key="/services" />
-        <a-tab-pane tab="Промокоды" key="/promocodes" />
+    <a-tabs :defaultActiveKey="routeName" @change="toRoute">
+        <a-tab-pane v-if="showCashbackTab" tab="Кэшбэк" key="/services" />
+        <a-tab-pane tab="Магазины" key="/offers" />
     </a-tabs>
 </template>
 <script>
-export default {
-    data() {
-        return {
-            tabs: [
-                {
-                    link: '/services',
-                    text: '',
-                    routeName: '/services',
-                },
-                {
-                    link: '/promocodes',
-                    text: '',
-                    routeName: 'promocodes',
-                },
-            ],
-        };
-    },
+import { localGet, getTabInfo } from '~/helpers';
 
-    computed: {
-        routeName() {
-            return this.$route.name;
+export default {
+    asyncComputed: {
+        async showCashbackTab() {
+            const route = await this.getRoute();
+            return route === 'services';
         },
 
-        showTabs() {
-            return this.isLogin && this.routeName !== 'no-offer';
+        async routeName() {
+            const route = await this.getRoute();
+            return `/${route}`;
         },
     },
 
     methods: {
+        async getRoute() {
+            const routes = await localGet('tabsInfo');
+            const tabId = await getTabInfo('id');
+            const route = routes[tabId];
+            return route;
+        },
+
         toRoute(route) {
             this.$router.push(route, () => {});
         },

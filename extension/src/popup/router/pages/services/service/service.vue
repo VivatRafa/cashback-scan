@@ -1,5 +1,5 @@
 <template>
-    <a-card hoverable>
+    <a-card hoverable @click="toService(service.serviceOfferId)">
         <div class="wrap">
             <div :class="['logo', { black: darkLogoService.includes(service.name) }]">
                 <img :src="service.logo" />
@@ -11,14 +11,16 @@
                     Кэшбэк {{ service.offer.isRatesMoreThanOne ? 'до' : '' }}
                     {{ addSignToString(service.offer.cashback, service.offer.rateSymbol) }}
                 </div>
-                <a-button @click="toService(service.serviceOfferId)" type="link">Подробнее</a-button>
+                <a-button type="link">Подробнее</a-button>
             </div>
         </div>
     </a-card>
 </template>
 
 <script>
-import { addSignToString } from '~/helpers';
+import { addSignToString, getConfigModule } from '~/helpers';
+
+const { darkLogoService } = getConfigModule('common');
 
 export default {
     props: {
@@ -29,13 +31,8 @@ export default {
     },
     data() {
         return {
-            darkLogoService: ['Kopikot', 'SecretDiscounter'],
+            darkLogoService,
         };
-    },
-    computed: {
-        bgColor() {
-            return this.service?.logo?.bgColor || 'none';
-        },
     },
     methods: {
         addSignToString,

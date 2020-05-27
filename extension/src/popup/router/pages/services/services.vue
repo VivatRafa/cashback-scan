@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { openWebVersion, getTabInfo, bgPage } from '~/helpers';
+import { getTabInfo, bgPage } from '~/helpers';
 import service from './service/service';
 import offerName from '~/components/offer-name';
 

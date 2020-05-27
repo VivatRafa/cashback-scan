@@ -1,6 +1,6 @@
 <template>
     <div class="plugin-content">
-        <div class="offers-title">Магазины</div>
+        <!-- <div class="offers-title">Магазины</div> -->
         <a-auto-complete class="search-input" @search="onSearch" @select="onSelect" placeholder="Начните вводить (минимум 2 символа)">
             <template slot="dataSource">
                 <a-select-option v-for="opt in filteredOffers" :key="opt.label" :value="opt.value">

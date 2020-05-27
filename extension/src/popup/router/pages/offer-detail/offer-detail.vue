@@ -16,22 +16,25 @@
                      маленький период подтверждения -->
                 </div>
             </div>
-            <a-divider type="horizontal">Кэшбэк сервисов</a-divider>
+            <a-divider type="horizontal">Кэшбэк сервисы</a-divider>
             <div class="service">
-                <div class="item" v-for="service in offer.services" :key="service.name">
+                <div class="item" v-for="service in offer.services" :key="service.name" @click="openWebVersion(service.link)">
+                    <img :class="['service-logo', { black: darkLogoService.includes(service.name) }]" :src="service.logo" />
                     <div class="name">{{ service.name }}</div>
                     <div class="value">{{ addSignToString(service.cashback, offer.rateSymbol) }}</div>
                 </div>
             </div>
-            <a-divider type="horizontal" />
+            <!-- <a-divider type="horizontal" />
             <a-button type="primary" class="btn-center">Перейти на сайт</a-button>
-            <a-divider type="horizontal" />
+            <a-divider type="horizontal" /> -->
         </a-card>
     </div>
 </template>
 
 <script>
-import { bgPage, addSignToString } from '~/helpers';
+import { bgPage, addSignToString, getConfigModule, openWebVersion } from '~/helpers';
+
+const { darkLogoService } = getConfigModule('common');
 
 export default {
     props: {
@@ -44,6 +47,7 @@ export default {
     data() {
         return {
             offer: null,
+            darkLogoService,
         };
     },
 
@@ -51,6 +55,7 @@ export default {
 
     methods: {
         addSignToString,
+        openWebVersion,
         toOffersList() {
             this.$router.push('/offers');
         },
@@ -65,19 +70,22 @@ export default {
 
         this.offer = {
             ...offer,
-            services: serviceOffers.map(serviceOffer => {
-                let name = '';
-                let cashback = 0;
-                services.forEach(service => {
-                    console.log(service);
-                    
-                    if (serviceOffer.serviceId === service.id) {
-                        name = service.name;
-                        cashback = serviceOffer.cashback;
-                    }
-                });
-                return { name, cashback };
-            }),
+            services: serviceOffers
+                .map(serviceOffer => {
+                    let serviceInfo = {};
+                    services.forEach(({ id, name, referalLink, logo }) => {
+                        if (serviceOffer.serviceId === id) {
+                            serviceInfo = {
+                                name,
+                                cashback: serviceOffer.cashback,
+                                link: referalLink,
+                                logo,
+                            };
+                        }
+                    });
+                    return serviceInfo;
+                })
+                .filter(({ cashback }) => cashback),
         };
     },
 };
@@ -125,17 +133,26 @@ export default {
     .item {
         display: flex;
         align-items: center;
+        justify-content: space-evenly;
         font-size: 18px;
         font-weight: 500;
         padding-bottom: 5px;
-        margin-bottom: 5px;
+        margin-bottom: 20px;
         border-bottom: 1px solid #e8e8e8;
+        cursor: pointer;
         &:last-child {
             margin-bottom: 0;
             border-bottom: 0;
         }
+        .service-logo {
+            width: 35px;
+            height: auto;
+            &.black {
+                background-color: #000;
+            }
+        }
         div {
-            width: 50%;
+            width: 33%;
         }
     }
 }

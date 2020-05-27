@@ -2,7 +2,7 @@
     <div class="plugin-content">
         <a-card v-if="service">
             <div class="wrap">
-                <div class="logo">
+                <div class="logo" :class="['logo', { black: darkLogoService.includes(service.name) }]">
                     <img :src="service.logo" />
                 </div>
                 <div class="info">
@@ -28,14 +28,16 @@
                 <div class="details" v-html="service.offer.conditions"></div>
             </div>
             <a-divider type="horizontal" />
-            <a-button type="primary" class="btn-center">Перейти на сайт</a-button>
+            <a-button type="primary" @click="openWebVersion(service.referalLink)" class="btn-center">Перейти на сайт</a-button>
             <a-divider type="horizontal" />
         </a-card>
     </div>
 </template>
 
 <script>
-import { bgPage, addSignToString } from '~/helpers';
+import { bgPage, addSignToString, getConfigModule, openWebVersion } from '~/helpers';
+
+const { darkLogoService } = getConfigModule('common');
 
 export default {
     props: {
@@ -48,11 +50,13 @@ export default {
     data() {
         return {
             service: null,
+            darkLogoService,
         };
     },
 
     methods: {
         addSignToString,
+        openWebVersion,
         toServicesList() {
             this.$router.push('/services');
         },
@@ -91,6 +95,9 @@ export default {
         margin-right: 15px;
         img {
             max-width: 90%;
+        }
+        &.black {
+            background-color: #000;
         }
     }
     .info {
