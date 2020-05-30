@@ -1,7 +1,7 @@
 {
-  "name": "cashback-ext",
-  "description": "Best Cashback App",
-  "version": null,
+  "name": "Cashback Scan",
+  "description": "Cashback Scan - расширение, которое позволит вам выбрать лучший размер кэшбэка в интересующем вас магазине на данный момент.",
+  "version": 1.0,
   "manifest_version": 2,
   "author": "vivat.rafael@gmail.com",
   "minimum_chrome_version": "70",
@@ -15,21 +15,15 @@
     "128": "icons/logo-128.png"
   },
   "permissions": [
-    "proxy",
-    "management",
     "notifications",
-    "cookies",
-    "activeTab",
     "tabs",
     "storage",
     "webNavigation",
-    "webRequest",
-    "webRequestBlocking",
     "http://*/*",
     "https://*/*"
   ],
   "browser_action": {
-    "default_title": "cashback-ext",
+    "default_title": "Cashback Scan",
     "default_popup": "popup/popup.html"
   },
   "background": {

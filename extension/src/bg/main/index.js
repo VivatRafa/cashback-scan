@@ -6,18 +6,35 @@ class Main {
         this.store = store;
         this.offers = new Offers(store);
         this.services = new Services(store);
+        this.refreshTimer = null;
+        this.refreshTime = 7200000; // 2h
 
         this.tabsInfo = {};
         this.init();
     }
 
     async init() {
-        await this.offers.getOffers();
-        this.offers.getTopOffers();
-        this.services.getServices();
+        await this.getOffersAndServices();
         this.updateAllTabs();
         browser.webNavigation.onBeforeNavigate.addListener(this.beforeNavigateHandler.bind(this));
         browser.webNavigation.onDOMContentLoaded.addListener(this.contentLoadHandler.bind(this));
+        this.startBackgroundOffersUpdate();
+    }
+
+    async getOffersAndServices() {
+        await this.offers.getOffers();
+        this.offers.getTopOffers();
+        this.services.getServices();
+    }
+
+    startBackgroundOffersUpdate() {
+        this.refreshTimer = setInterval(() => {
+            this.getOffersAndServices();
+        }, this.refreshTime);
+    }
+
+    finishBackgroundOffersUpdate() {
+        if (this.refreshTimer) clearInterval(this.refreshTimer);
     }
 
     beforeNavigateHandler({ url }) {

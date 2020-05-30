@@ -19,7 +19,7 @@
             <a-divider type="horizontal">Кэшбэк сервисы</a-divider>
             <div class="service">
                 <div class="item" v-for="service in offer.services" :key="service.name" @click="openWebVersion(service.link)">
-                    <img :class="['service-logo', { black: darkLogoService.includes(service.name) }]" :src="service.logo" />
+                    <img :class="['service-logo', { black: darkLogoService.includes(service.name) }]" :src="`../../../../assets/${logos[service.name.toLowerCase()]}`" />
                     <div class="name">{{ service.name }}</div>
                     <div class="value">{{ addSignToString(service.cashback, offer.rateSymbol) }}</div>
                 </div>
@@ -33,6 +33,12 @@
 
 <script>
 import { bgPage, addSignToString, getConfigModule, openWebVersion } from '~/helpers';
+// засунуть в миксин
+import cash4brands from '../../../../assets/images/cash4brands.png';
+import backit from '../../../../assets/images/backit.svg';
+import kopikot from '../../../../assets/images/kopikot.png';
+import letyshops from '../../../../assets/images/letyshops.svg';
+import skidka from '../../../../assets/images/skidka.svg';
 
 const { darkLogoService } = getConfigModule('common');
 
@@ -48,10 +54,15 @@ export default {
         return {
             offer: null,
             darkLogoService,
+            logos: {
+                backit,
+                letyshops,
+                kopikot,
+                skidka,
+                cash4brands,
+            },
         };
     },
-
-    computed: {},
 
     methods: {
         addSignToString,
@@ -136,8 +147,8 @@ export default {
         justify-content: space-evenly;
         font-size: 18px;
         font-weight: 500;
-        padding-bottom: 5px;
-        margin-bottom: 20px;
+        padding-bottom: 15px;
+        margin-bottom: 15px;
         border-bottom: 1px solid #e8e8e8;
         cursor: pointer;
         &:last-child {

@@ -2,7 +2,7 @@
     <a-card hoverable @click="toService(service.serviceOfferId)">
         <div class="wrap">
             <div :class="['logo', { black: darkLogoService.includes(service.name) }]">
-                <img :src="service.logo" />
+                <img :src="`../../../../../assets/${logos[service.name.toLowerCase()]}`" />
             </div>
             <div class="info">
                 <div class="name">{{ service.name }}</div>
@@ -19,6 +19,12 @@
 
 <script>
 import { addSignToString, getConfigModule } from '~/helpers';
+// засунуть в миксин
+import cash4brands from '../../../../../assets/images/cash4brands.png';
+import backit from '../../../../../assets/images/backit.svg';
+import kopikot from '../../../../../assets/images/kopikot.png';
+import letyshops from '../../../../../assets/images/letyshops.svg';
+import skidka from '../../../../../assets/images/skidka.svg';
 
 const { darkLogoService } = getConfigModule('common');
 
@@ -32,6 +38,13 @@ export default {
     data() {
         return {
             darkLogoService,
+            logos: {
+                backit,
+                letyshops,
+                kopikot,
+                skidka,
+                cash4brands,
+            },
         };
     },
     methods: {
