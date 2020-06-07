@@ -3,7 +3,7 @@
         <a-card v-if="service">
             <div class="wrap">
                 <div class="logo" :class="['logo', { black: darkLogoService.includes(service.name) }]">
-                    <img :src="service.logo" />
+                    <img :src="`../../../../../assets/${logos[service.name.toLowerCase()]}`" />
                 </div>
                 <div class="info">
                     <div class="panel">
@@ -36,6 +36,12 @@
 
 <script>
 import { bgPage, addSignToString, getConfigModule, openWebVersion } from '~/helpers';
+// засунуть в миксин
+import cash4brands from '../../../../assets/images/cash4brands.png';
+import backit from '../../../../assets/images/backit.svg';
+import kopikot from '../../../../assets/images/kopikot.png';
+import letyshops from '../../../../assets/images/letyshops.svg';
+import skidka from '../../../../assets/images/skidka.svg';
 
 const { darkLogoService } = getConfigModule('common');
 
@@ -51,6 +57,13 @@ export default {
         return {
             service: null,
             darkLogoService,
+            logos: {
+                backit,
+                letyshops,
+                kopikot,
+                skidka,
+                cash4brands,
+            },
         };
     },
 
